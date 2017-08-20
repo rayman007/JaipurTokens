@@ -14,7 +14,7 @@ import java.util.LinkedList;
  * Created by Florian on 18/08/2017.
  */
 
-public class TokenStackView {
+public class TokenStackView implements TokenHandler{
 
     final private LinkedList<Token> mTokenList;
     private ViewGroup originView;
@@ -22,14 +22,30 @@ public class TokenStackView {
     private int tokenOffset;
     private Context originContext;
     private Activity activity;
+    final private TokenStackView me;
+
+    public void add(Token t) {
+
+        RelativeLayout.LayoutParams lp;
+        mTokenList.add(t);
+        int i = mTokenList.size()-1;
+        ImageView iv = new ImageView(originContext);
+        iv.setImageResource(mTokenList.get(i).getResid());
+        lp = new RelativeLayout.LayoutParams(200, 200);
+        lp.leftMargin = i * tokenOffset;
+        lp.topMargin = 0;
+        originView.addView(iv, lp);
+        mTokenList.get(i).setImageView(iv);
+    }
 
     public void remove(Token t) {
+        t.getImageView().setVisibility(View.INVISIBLE);
         mTokenList.remove(t);
     }
 
     public TokenStackView(Activity _activity, int _originViewId, LinkedList<Token> _tokenList, boolean _stackedToken) {
 
-        final TokenStackView me = this;
+        this.me = this;
         this.activity = _activity;
         this.mTokenList = _tokenList;
         this.originViewId = _originViewId;
@@ -67,7 +83,7 @@ public class TokenStackView {
                         if (mTokenList.size() != 0) {
                             Token token = mTokenList.get(mTokenList.size() - 1);
                             v.startDrag(null, new View.DragShadowBuilder(token.getImageView()), token, 0);
-                            token.getImageView().setVisibility(View.INVISIBLE);
+                            History.getInstance().initiateTransaction(token, me);
                             return true;
                         }
                 }

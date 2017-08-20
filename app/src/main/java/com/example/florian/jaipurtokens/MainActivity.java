@@ -140,5 +140,21 @@ public class MainActivity extends AppCompatActivity {
         new PlayerBoardView(this, R.id.player1board, R.id.player1score, tsvl);
         new PlayerBoardView(this, R.id.player2board, R.id.player2score, tsvl);
 
+        History.getInstance().setAct(this);
+
+        findViewById(R.id.undoView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                History.getInstance().undo();
+            }
+        });
+
+        findViewById(R.id.undoAll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.super.recreate();
+            }
+        });
     }
+
 }

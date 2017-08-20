@@ -12,13 +12,14 @@ import android.widget.TextView;
  * Created by Florian on 16/08/2017.
  */
 
-public class PlayerBoardView {
+public class PlayerBoardView implements TokenHandler {
 
     Activity act;
     int resid;
     int textresid;
     TokenStackViewList tsvl;
     int score;
+    final private PlayerBoardView me;
 
     public PlayerBoardView(Activity _act, int _resid, int _textresid, TokenStackViewList _tsvl) {
 
@@ -27,6 +28,7 @@ public class PlayerBoardView {
         this.tsvl = _tsvl;
         this.act = _act;
         this.score = 0;
+        this.me = this;
 
         act.findViewById(resid).setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -47,8 +49,6 @@ public class PlayerBoardView {
             @Override
             public boolean onDrag(View v, DragEvent event) {
 
-                final Token tok = (Token) event.getLocalState();
-
                 switch (event.getAction()) {
                     case DragEvent.ACTION_DRAG_STARTED:
                     case DragEvent.ACTION_DRAG_EXITED:
@@ -60,17 +60,11 @@ public class PlayerBoardView {
                     case DragEvent.ACTION_DRAG_ENDED:
                         ((ImageView) v).clearColorFilter();
                         if (!event.getResult()) {
-                            v.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    tok.getImageView().setVisibility(View.VISIBLE);
-                                }
-                            });
+                            History.getInstance().abortTransaction();
                         }
                         break;
                     case DragEvent.ACTION_DROP:
-                        score += tok.getValue();
-                        tsvl.removeToken(tok);
+                        History.getInstance().completeTransaction(me);
                 }
                 return true;
             }
@@ -79,4 +73,13 @@ public class PlayerBoardView {
 
     }
 
+    @Override
+    public void add(Token t) {
+        score += t.getValue();
+    }
+
+    @Override
+    public void remove(Token t) {
+        score -= t.getValue();
+    }
 }
