@@ -1,4 +1,4 @@
-package com.example.florian.myapplication;
+package com.example.florian.jaipurtokens;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

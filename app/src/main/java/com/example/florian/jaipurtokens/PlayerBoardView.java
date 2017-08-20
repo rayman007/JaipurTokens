@@ -1,4 +1,4 @@
-package com.example.florian.myapplication;
+package com.example.florian.jaipurtokens;
 
 import android.app.Activity;
 import android.graphics.PorterDuff;

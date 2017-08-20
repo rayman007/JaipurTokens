@@ -1,4 +1,4 @@
-package com.example.florian.myapplication;
+package com.example.florian.jaipurtokens;
 
 import java.util.ArrayList;
 import java.util.List;
