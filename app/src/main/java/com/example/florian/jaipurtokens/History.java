@@ -52,17 +52,18 @@ public class History {
 
     public void completeTransaction(TokenHandler th) {
         if (transactionInProgress) {
+            MediaPlayer.create(act, R.raw.petite_piece).start();
             transactionInProgress = false;
             currentTransaction.setDest(th);
             currentTransaction.getDest().add(currentTransaction.getToken());
             list.add(currentTransaction);
-            MediaPlayer.create(act, R.raw.petite_piece).start();
 
         }
     }
 
     public void undo() {
         if (list.size() != 0) {
+            MediaPlayer.create(act, R.raw.undo).start();
             TokenTransaction tt = list.get(list.size() - 1);
             list.remove(list.size() - 1);
             tt.getDest().remove(tt.getToken());
