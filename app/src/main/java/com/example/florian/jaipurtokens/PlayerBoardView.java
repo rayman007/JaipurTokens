@@ -17,15 +17,13 @@ public class PlayerBoardView implements TokenHandler {
     Activity act;
     int resid;
     int textresid;
-    TokenStackViewList tsvl;
     int score;
     final private PlayerBoardView me;
 
-    public PlayerBoardView(Activity _act, int _resid, int _textresid, TokenStackViewList _tsvl) {
+    public PlayerBoardView(Activity _act, int _resid, int _textresid) {
 
         this.resid = _resid;
         this.textresid = _textresid;
-        this.tsvl = _tsvl;
         this.act = _act;
         this.score = 0;
         this.me = this;
