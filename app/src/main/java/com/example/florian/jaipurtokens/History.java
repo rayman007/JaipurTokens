@@ -17,8 +17,11 @@ public class History {
     Activity act;
 
     private static History instance = new History();
+    private MediaPlayer coinMediaPlayer;
+    private MediaPlayer undoMediaPlayer;
 
     public History() {
+
         this.list = new LinkedList<TokenTransaction>();
     }
 
@@ -27,7 +30,11 @@ public class History {
     }
 
     public void setAct(Activity act) {
+
         this.act = act;
+        coinMediaPlayer = MediaPlayer.create(act, R.raw.petite_piece);
+        undoMediaPlayer = MediaPlayer.create(act, R.raw.undo);
+
     }
 
     public void addTransaction (TokenTransaction tt) {
@@ -52,7 +59,7 @@ public class History {
 
     public void completeTransaction(TokenHandler th) {
         if (transactionInProgress) {
-            MediaPlayer.create(act, R.raw.petite_piece).start();
+            coinMediaPlayer.start();
             transactionInProgress = false;
             currentTransaction.setDest(th);
             currentTransaction.getDest().add(currentTransaction.getToken());
@@ -63,7 +70,7 @@ public class History {
 
     public void undo() {
         if (list.size() != 0) {
-            MediaPlayer.create(act, R.raw.undo).start();
+            undoMediaPlayer.start();
             TokenTransaction tt = list.get(list.size() - 1);
             list.remove(list.size() - 1);
             tt.getDest().remove(tt.getToken());
