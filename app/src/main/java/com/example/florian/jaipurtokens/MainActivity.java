@@ -2,11 +2,21 @@ package com.example.florian.jaipurtokens;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -26,6 +36,38 @@ public class MainActivity extends AppCompatActivity {
                 destresid,
                 tokenlist,
                 true);
+    }
+
+    private File CopyFile2SdCard(String filename) {
+        AssetManager asstMan = getAssets();
+        try {
+            InputStream in = null;
+            OutputStream out = null;
+            in = asstMan.open(filename);
+            File outFile = new File(getExternalFilesDir(null), filename);
+            out = new FileOutputStream(outFile);
+            CopyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+            return outFile;
+
+        } catch (IOException e) {
+            Log.e("Copy Error", "Failed to get asset file");
+        }
+
+        return null;
+
+    }
+
+    private void CopyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
     }
 
     @Override
@@ -161,6 +203,23 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        findViewById(R.id.pdfView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                File pdfFile = CopyFile2SdCard("jaipur.pdf");
+                Uri path = Uri.fromFile(pdfFile);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(path, "application/pdf");
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

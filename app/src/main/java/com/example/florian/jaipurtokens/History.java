@@ -35,7 +35,7 @@ public class History {
         coinMediaPlayer = MediaPlayer.create(act, R.raw.petite_piece);
         undoMediaPlayer = MediaPlayer.create(act, R.raw.undo);
 
-    }
+        }
 
     public void addTransaction (TokenTransaction tt) {
         list.add(tt);
